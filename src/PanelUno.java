@@ -17,7 +17,8 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     public static String[] tablica = new String[108];
     int licznikDoku=14;
     int ruchX=0, ruchY=0;
-    int ruchX2=0;
+    int ruchX2=0, ruchY2=0;
+    
     public PanelUno() {
         
         for(int i =0;i<108;i++){
@@ -61,11 +62,13 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         for(int i=licznikDoku-14, j=0;i<licznikDoku; i++, j++) {
             sciezka="src/png/"+tablica[i]+".png";
             karta = new ImageIcon(sciezka);
-            karta = new ImageIcon(new ImageIcon(sciezka).getImage().getScaledInstance(107, 153, java.awt.Image.SCALE_SMOOTH));
-            if(ruchY>560&&ruchY<765&&ruchX==j)
+            //karta = new ImageIcon(new ImageIcon(sciezka).getImage().getScaledInstance(107, 153, java.awt.Image.SCALE_SMOOTH));
+            if(ruchY>560&&ruchY<762&&ruchX==j)
                 karta.paintIcon(this, g, j*30+47, 480);	
             else
             	karta.paintIcon(this, g, j*30+47, 600);
+            karta = new ImageIcon("src/png/strzalka1.png");
+            karta.paintIcon(this, g, 47, 753);	
         }
     }
     
@@ -78,7 +81,8 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	 
          ruchX2=arg0.getX();
          ruchY=arg0.getY();
-         if(ruchY>560&&ruchY<765) {
+         if(ruchY>560&&ruchY<753) {
+        	 ruchY2=1;
         	 ruchX2=(ruchX2-47)/30;
         	 if(ruchX2!=ruchX) {
         		 ruchX=ruchX2;
@@ -90,7 +94,12 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         		 if(ruchX>=ileWyswietla&&ruchX<ileWyswietla+3)
         			 ruchX=ileWyswietla-1;
         		 repaint();
-        		 //System.out.println(ruchX);
+        	 }
+         }
+         else {
+        	 if(ruchY2==1) {
+        		 ruchY2=0;
+        		 repaint();
         	 }
          }
      }
