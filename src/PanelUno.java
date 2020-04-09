@@ -39,12 +39,12 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
          	tablica[7]="n7";
          	tablica[8]="c4";
          	tablica[9]="y2";
-         	tablica[10]="z+2";
+         	tablica[10]="zt";
          	tablica[11]="z8";
          	tablica[12]="z2";
          	tablica[13]="y0";
          	tablica[14]="np";
-         	tablica[15]="b+4";
+         	tablica[15]="bf";
          	tablica[16]="z8";
          	tablica[17]="y5";
         repaint();
@@ -67,8 +67,6 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
             else
             	karta.paintIcon(this, g, j*30+47, 600);
         }
-        	karta = new ImageIcon("src/png/strzalka1.png");
-            karta.paintIcon(this, g, 47, 762);	
     }
     
     @Override
@@ -92,18 +90,22 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         		 if(ruchX>=ileWyswietla&&ruchX<ileWyswietla+3)
         			 ruchX=ileWyswietla-1;
         		 repaint();
-        		 System.out.println(ruchX);
+        		 //System.out.println(ruchX);
         	 }
          }
      }
  
      @Override
      public void mouseClicked(MouseEvent e) {
+    	 if(ruchX>=0&&ruchX<=13)System.out.println(tablica[ruchX+licznikDoku-14]);
          if(tablica[licznikDoku+1]=="n")
         	 licznikDoku=14;
          else
         	 licznikDoku=licznikDoku+14;
+         
          repaint();
+       
+         
      }
  
      @Override
