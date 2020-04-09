@@ -1,4 +1,3 @@
-package projekt;
 
 
 public class Tescik{

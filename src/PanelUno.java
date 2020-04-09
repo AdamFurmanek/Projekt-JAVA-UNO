@@ -1,4 +1,4 @@
-package projekt;
+
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -69,17 +69,17 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     
     public void paint(Graphics g) {
         
-        karta = new ImageIcon("projekt/src/stol_gry.jpg");
+        karta = new ImageIcon("src/stol_gry.jpg");
         karta.paintIcon(this, g, 0, 0);
         
         String sciezka = new String();
 
         for(int j=i+5, k=0;i<j; i++, k++) {
-            sciezka="projekt/src/"+tablica[i][0]+tablica[i][1]+".png";
+            sciezka="src/"+tablica[i][0]+tablica[i][1]+".png";
             karta = new ImageIcon(sciezka);
             karta.paintIcon(this, g, k*107+84, 600);
         }
-        karta = new ImageIcon("projekt/src/up.png");
+        karta = new ImageIcon("src/up.png");
         karta.paintIcon(this, g, 5*107+84, 600);
         if(tablica[i+1][0]=='n')
             i=0;

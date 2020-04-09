@@ -1,4 +1,4 @@
-package projekt;
+
 
 public class Stack {
  
