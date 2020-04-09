@@ -61,7 +61,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         for(int i=licznikDoku-14, j=0;i<licznikDoku; i++, j++) {
             sciezka="src/png/"+tablica[i]+".png";
             karta = new ImageIcon(sciezka);
-            //karta = new ImageIcon(new ImageIcon(sciezka).getImage().getScaledInstance(107, 153, java.awt.Image.SCALE_SMOOTH));
+            karta = new ImageIcon(new ImageIcon(sciezka).getImage().getScaledInstance(107, 153, java.awt.Image.SCALE_SMOOTH));
             if(ruchY>560&&ruchY<765&&ruchX==j)
                 karta.paintIcon(this, g, j*30+47, 480);	
             else
