@@ -67,6 +67,8 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
             else
             	karta.paintIcon(this, g, j*30+47, 600);
         }
+        	karta = new ImageIcon("src/png/strzalka1.png");
+            karta.paintIcon(this, g, 47, 762);	
     }
     
     @Override
