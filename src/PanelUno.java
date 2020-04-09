@@ -14,120 +14,110 @@ import java.awt.event.MouseMotionListener;
 public class PanelUno extends JPanel implements MouseListener, MouseMotionListener{
     
     public ImageIcon karta;
-    public static char[][] tablica = new char[108][2];
+    public static String[] tablica = new String[108];
+    int licznikDoku=14;
+    int ruchX=0, ruchY=0;
+    int ruchX2=0;
     public PanelUno() {
         
         for(int i =0;i<108;i++){
-            tablica[i][0]='n';
-            tablica[i][1]='n';
+        	tablica[i]= new String();
+            tablica[i]="n";
             }
 
          addMouseListener(this);
          addMouseMotionListener(this);
-        tablica[0][0]='c';
-        tablica[0][1]='0';
 
-        tablica[1][0]='c';
-        tablica[1][1]='1';
-
-        tablica[2][0]='c';
-        tablica[2][1]='2';
-        
-        tablica[3][0]='c';
-        tablica[3][1]='0';
-        
-        tablica[4][0]='c';
-        tablica[4][1]='1';
-        
-        tablica[5][0]='c';
-        tablica[5][1]='0';
-        
-        tablica[6][0]='c';
-        tablica[6][1]='2';
-        
-        tablica[7][0]='c';
-        tablica[7][1]='0';
-        
-        tablica[8][0]='c';
-        tablica[8][1]='0';
-        
-        tablica[9][0]='c';
-        tablica[9][1]='0';
-        
-        tablica[10][0]='c';
-        tablica[10][1]='0';
-        
-        tablica[11][0]='c';
-        tablica[11][1]='0';
-        
-
+         
+         	tablica[0]="z7";
+         	tablica[1]="y4";
+         	tablica[2]="z1";
+         	tablica[3]="zz";
+         	tablica[4]="n0";
+         	tablica[5]="bz";
+         	tablica[6]="c5";
+         	tablica[7]="n7";
+         	tablica[8]="c4";
+         	tablica[9]="y2";
+         	tablica[10]="z+2";
+         	tablica[11]="z8";
+         	tablica[12]="z2";
+         	tablica[13]="y0";
+         	tablica[14]="np";
+         	tablica[15]="b+4";
+         	tablica[16]="z8";
+         	tablica[17]="y5";
         repaint();
     }
- 
-    int i=0;
     
     
     public void paint(Graphics g) {
         
-        karta = new ImageIcon("src/stol_gry.jpg");
+        karta = new ImageIcon("src/png/stol.png");
         karta.paintIcon(this, g, 0, 0);
         
         String sciezka = new String();
 
-        for(int j=i+5, k=0;i<j; i++, k++) {
-            sciezka="src/"+tablica[i][0]+tablica[i][1]+".png";
+        for(int i=licznikDoku-14, j=0;i<licznikDoku; i++, j++) {
+            sciezka="src/png/"+tablica[i]+".png";
             karta = new ImageIcon(sciezka);
-            karta.paintIcon(this, g, k*107+84, 600);
+            //karta = new ImageIcon(new ImageIcon(sciezka).getImage().getScaledInstance(107, 153, java.awt.Image.SCALE_SMOOTH));
+            if(ruchY>560&&ruchY<765&&ruchX==j)
+                karta.paintIcon(this, g, j*30+47, 480);	
+            else
+            	karta.paintIcon(this, g, j*30+47, 600);
         }
-        karta = new ImageIcon("src/up.png");
-        karta.paintIcon(this, g, 5*107+84, 600);
-        if(tablica[i+1][0]=='n')
-            i=0;
     }
     
     @Override
      public void mouseDragged(MouseEvent arg0) {
-         //System.out.println("mouseDragged");
      }
  
      @Override
      public void mouseMoved(MouseEvent arg0) {
-         //System.out.println("mouseMoved");
+    	 
+         ruchX2=arg0.getX();
+         ruchY=arg0.getY();
+         if(ruchY>560&&ruchY<765) {
+        	 ruchX2=(ruchX2-47)/30;
+        	 if(ruchX2!=ruchX) {
+        		 ruchX=ruchX2;
+        		 int ileWyswietla=0;
+        		 for(int i=licznikDoku-14;i<licznikDoku;i++) {
+        			 if(tablica[i]!="n")
+        				 ileWyswietla++;
+        		 }
+        		 if(ruchX>=ileWyswietla&&ruchX<ileWyswietla+3)
+        			 ruchX=ileWyswietla-1;
+        		 repaint();
+        		 System.out.println(ruchX);
+        	 }
+         }
      }
  
      @Override
      public void mouseClicked(MouseEvent e) {
-         System.out.println("mouseClicked");
-         int x,y;
-         x=e.getX();
-         y=e.getY();
-         if(y>600&&y<745) {
-              System.out.println("Trafiles w dok krolu jebany");
-         x=(x-84)/107;
-             System.out.println("Brawo, kliknales karte numer:"+x);
-         }
-         if(x==5)
-             repaint();
+         if(tablica[licznikDoku+1]=="n")
+        	 licznikDoku=14;
+         else
+        	 licznikDoku=licznikDoku+14;
+         repaint();
      }
  
      @Override
      public void mouseEntered(MouseEvent e) {
-         //System.out.println("mouseEntered");
      }
  
      @Override
      public void mouseExited(MouseEvent e) {
-         //System.out.println("mouseExited");
      }
  
      @Override
      public void mousePressed(MouseEvent e) {
-         //System.out.println("mousePressed");
      }
  
      @Override
      public void mouseReleased(MouseEvent e) {
-         //System.out.println("mouseReleased");
      }
      
 }
