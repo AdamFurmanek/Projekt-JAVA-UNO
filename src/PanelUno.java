@@ -17,7 +17,8 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     public static String[] tablica = new String[108];
     int licznikDoku=14;
     int ruchX=0, ruchY=0;
-    int ruchX2=0, ruchY2=0;
+    int ruchX2=0, ruchPole=0;
+
     
     public PanelUno() {
         
@@ -44,10 +45,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
          	tablica[11]="z8";
          	tablica[12]="z2";
          	tablica[13]="y0";
-         	tablica[14]="np";
-         	tablica[15]="bf";
-         	tablica[16]="z8";
-         	tablica[17]="y5";
+
         repaint();
     }
     
@@ -63,12 +61,17 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
             sciezka="src/png/"+tablica[i]+".png";
             karta = new ImageIcon(sciezka);
             //karta = new ImageIcon(new ImageIcon(sciezka).getImage().getScaledInstance(107, 153, java.awt.Image.SCALE_SMOOTH));
-            if(ruchY>560&&ruchY<762&&ruchX==j)
+            if(ruchPole==1&&ruchX==j)
                 karta.paintIcon(this, g, j*30+47, 480);	
             else
             	karta.paintIcon(this, g, j*30+47, 600);
-            karta = new ImageIcon("src/png/strzalka1.png");
-            karta.paintIcon(this, g, 47, 753);	
+            if(tablica[14]!="n") {
+            	if(ruchPole==2)
+            		karta = new ImageIcon("src/png/strzalka2.png");
+            	else
+            		karta = new ImageIcon("src/png/strzalka1.png");
+            	karta.paintIcon(this, g, 47, 753);	
+            }
         }
     }
     
@@ -81,8 +84,17 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	 
          ruchX2=arg0.getX();
          ruchY=arg0.getY();
-         if(ruchY>560&&ruchY<753) {
-        	 ruchY2=1;
+         if(ruchY>753&&ruchY<780&&ruchX2>47&&ruchX2<97) {
+        	 if(ruchPole!=2) {
+        		 ruchPole=2;
+        		 repaint();
+        	 }
+         }
+         else if(ruchY>560&&ruchY<753) {
+        	 if(ruchPole!=1) {
+        		 ruchPole=1;
+        		 repaint();
+        	 }
         	 ruchX2=(ruchX2-47)/30;
         	 if(ruchX2!=ruchX) {
         		 ruchX=ruchX2;
@@ -96,9 +108,10 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         		 repaint();
         	 }
          }
+
          else {
-        	 if(ruchY2==1) {
-        		 ruchY2=0;
+        	 if(ruchPole!=0) {
+        		 ruchPole=0;
         		 repaint();
         	 }
          }
@@ -106,15 +119,16 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
  
      @Override
      public void mouseClicked(MouseEvent e) {
-    	 if(ruchX>=0&&ruchX<=13)System.out.println(tablica[ruchX+licznikDoku-14]);
-         if(tablica[licznikDoku+1]=="n")
-        	 licznikDoku=14;
-         else
-        	 licznikDoku=licznikDoku+14;
-         
-         repaint();
-       
-         
+    	 if(ruchX>=0&&ruchX<=13)
+    		 System.out.println(tablica[ruchX+licznikDoku-14]);
+    	 
+    	 if(tablica[14]!="n"&&ruchPole==2) {
+    		if(tablica[licznikDoku+1]=="n")
+        	 	licznikDoku=14;
+         	else
+         		licznikDoku=licznikDoku+14;
+            repaint();
+    	 }
      }
  
      @Override
