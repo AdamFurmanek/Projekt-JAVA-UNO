@@ -6,15 +6,17 @@ import java.awt.EventQueue;
 
 public class Klient{
 
-public static void  main(String[] args) throws IOException {
-	//Socket s = new Socket("localhost", 4999);
-	
-	EventQueue.invokeLater(new Runnable() {
-		public void run() {
-			new Okno();
-		}
-	});
-	
-	}
+	public static String kartaStol= new String("c4");
+	public static int graczLewo=50, graczGora=10, graczPrawo=5;
 
+	
+	public static void  main(String[] args) throws IOException {
+		//Socket s = new Socket("localhost", 4999);
+	
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new Okno();
+			}
+		});
+	}
 }

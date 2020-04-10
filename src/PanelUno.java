@@ -55,15 +55,19 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     
     public void paint(Graphics g) {
         
-        karta = new ImageIcon("src/png/stol.png");
+        karta = new ImageIcon("src/png/stol1.png");
         karta.paintIcon(this, g, 0, 0);
+        
+        karta = new ImageIcon("src/png/zegar1.png");
+        karta.paintIcon(this, g, 210, 210);
         
         String sciezka = new String();
 
         for(int i=licznikDoku-14, j=0;i<licznikDoku; i++, j++) {
+        	
             sciezka="src/png/"+tablica[i]+".png";
             karta = new ImageIcon(sciezka);
-            //karta = new ImageIcon(new ImageIcon(sciezka).getImage().getScaledInstance(107, 153, java.awt.Image.SCALE_SMOOTH));
+
             if(ruchPole==1&&ruchX==j)
                 karta.paintIcon(this, g, j*30+47, 480);	
             else
@@ -75,12 +79,41 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
             		karta = new ImageIcon("src/png/strzalka1.png");
             	karta.paintIcon(this, g, 47, 753);	
             }
-            if(ruchPole==3)
-            	karta = new ImageIcon("src/png/uno2.png");
-            else
-            	karta = new ImageIcon("src/png/uno3.png");
-        	karta.paintIcon(this, g, 600, 593);
+
         }
+        if(ruchPole==3)
+        	karta = new ImageIcon("src/png/uno2.png");
+        else
+        	karta = new ImageIcon("src/png/uno3.png");
+    	karta.paintIcon(this, g, 600, 593);
+    	
+    	sciezka="src/png/"+Klient.kartaStol+".png";
+    	karta = new ImageIcon(sciezka);
+    	karta.paintIcon(this, g, 349, 327);
+    	
+    	int j=Klient.graczLewo/2;
+    	if(j>6)
+    		j=6;
+    	karta = new ImageIcon("src/png/unoLewo.png");
+    	for(int i=0;i<Klient.graczLewo&&i<14;i++) {
+        	karta.paintIcon(this, g, 47, 130+(i+6-j)*20);
+    	}
+    	
+    	j=Klient.graczGora/2;
+    	if(j>6)
+    		j=6;
+    	karta = new ImageIcon("src/png/unoGora.png");
+    	for(int i=0;i<Klient.graczGora&&i<14;i++) {
+        	karta.paintIcon(this, g, 476-(i+6-j)*20, 47);
+    	}
+    	
+    	j=Klient.graczPrawo/2;
+    	if(j>6)
+    		j=6;
+    	karta = new ImageIcon("src/png/unoPrawo.png");
+    	for(int i=0;i<Klient.graczPrawo&&i<14;i++) {
+        	karta.paintIcon(this, g, 600, 390-(i+6-j)*20);
+    	}
     }
     
     @Override
