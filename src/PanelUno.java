@@ -45,7 +45,10 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
          	tablica[11]="z8";
          	tablica[12]="z2";
          	tablica[13]="y0";
-
+         	tablica[14]="np";
+         	tablica[15]="bf";
+         	tablica[16]="z8";
+         	tablica[17]="y5";
         repaint();
     }
     
@@ -72,6 +75,11 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
             		karta = new ImageIcon("src/png/strzalka1.png");
             	karta.paintIcon(this, g, 47, 753);	
             }
+            if(ruchPole==3)
+            	karta = new ImageIcon("src/png/uno2.png");
+            else
+            	karta = new ImageIcon("src/png/uno3.png");
+        	karta.paintIcon(this, g, 600, 593);
         }
     }
     
@@ -87,6 +95,12 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
          if(ruchY>753&&ruchY<780&&ruchX2>47&&ruchX2<97) {
         	 if(ruchPole!=2) {
         		 ruchPole=2;
+        		 repaint();
+        	 }
+         }
+         else if(ruchY>560&&ruchY<753&&ruchX2>610&&ruchX2<770) {
+        	 if(ruchPole!=3) {
+        		 ruchPole=3;
         		 repaint();
         	 }
          }
@@ -119,7 +133,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
  
      @Override
      public void mouseClicked(MouseEvent e) {
-    	 if(ruchX>=0&&ruchX<=13)
+    	 if(ruchX>=0&&ruchX<=13&&ruchPole==1)
     		 System.out.println(tablica[ruchX+licznikDoku-14]);
     	 
     	 if(tablica[14]!="n"&&ruchPole==2) {
