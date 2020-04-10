@@ -7,7 +7,8 @@ import java.awt.EventQueue;
 public class Klient{
 
 	public static String kartaStol= new String("c4");
-	public static int graczLewo=50, graczGora=10, graczPrawo=5;
+	public static int graczLewo=8, graczGora=20, graczPrawo=3;
+	public static int kierunek=2;
 
 	
 	public static void  main(String[] args) throws IOException {
