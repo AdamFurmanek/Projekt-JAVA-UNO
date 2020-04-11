@@ -5,18 +5,16 @@ import javax.swing.JPanel;
 public class Okno extends JFrame
 
 {
-
+	public static PanelUno panelUno;
 public Okno()
     {
-   	 super("Wojna");
+   	 super("Uno - gracz "+Klient.gracz);
    	 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	 setVisible(true);
    	 setResizable(false);
    	 setSize(816,839);
-   	 
-   	 PanelUno panelUno = new PanelUno();
+   	 panelUno = new PanelUno();
    	 add(panelUno);
-
    	 
    	 //pack();
     }
