@@ -38,7 +38,7 @@ public static void  main(String[] args)throws IOException {
 	reset();
 	polaczenie();
 	wyslanie();
-
+	System.out.println(in1.readLine());
 
 		//WHILE(TRUE)
 		//BLOK WYSLANIA
@@ -99,10 +99,19 @@ public static void  main(String[] args)throws IOException {
 		lista.add("bf");
 		lista.add("bf");
 		
+		for(int i=0;i<500;i++)
+			lista.add("bf");
+		
 		Collections.shuffle(lista);
         for(int i =0;i<108;i++){
         	tablica1[i]= new String();
         	tablica1[i]="n";
+        	tablica2[i]= new String();
+        	tablica2[i]="n";
+        	tablica3[i]= new String();
+        	tablica3[i]="n";
+        	tablica4[i]= new String();
+        	tablica4[i]="n";
         }
 		for(int i=0;i<7;i++) {
 			tablica1[i]=lista.remove(0);
@@ -115,6 +124,11 @@ public static void  main(String[] args)throws IOException {
 				kartaStol=lista.remove(i);	
 				break;
 			}
+		}
+		if(kartaStol.charAt(1)=='p') {
+			tura++;
+			if(tura==5)
+				tura=4;
 		}
 		if(kartaStol.charAt(1)=='z')
 			kierunek=2;

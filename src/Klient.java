@@ -19,9 +19,10 @@ public class Klient{
     public static Okno okno;
     
 	public static void  main(String[] args) throws IOException {
-        for(int i=0;i<108;i++)
+        for(int i=0;i<108;i++) {
         	tablica[i]= new String();
-        tablica[14]="n";
+        	tablica[i]="n";
+        }
         	
 		socket = new Socket("localhost", 4999);
 		out = new PrintWriter(socket.getOutputStream(), true);
@@ -37,16 +38,9 @@ public class Klient{
 		odebranie();
 
 		
-		//PETLA W KTOREJ ZACZYNAMY ODBIOREM
-		//while(true) {
-		//	if(bf.ready()) {
-		//		System.out.println(bf.read());
-		//		break;
-		//	}
-		//	
-		//	System.out.println("elo");
-		//	
-		//}
+		//WHILE(TRUE)
+		//ODEBRANIE
+		//WYSLANIE
 	}
 	public static void odebranie() throws IOException  {
 		kod=in.readLine();
@@ -96,6 +90,9 @@ public class Klient{
 		}
 		
 		Okno.panelUno.repaint();
+	}
+	public static void wyslanie(String kod) {
+		out.println(kod);
 	}
 }
 

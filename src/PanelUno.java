@@ -19,13 +19,13 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     int ruchX=0, ruchY=0;
     int ruchX2=0, ruchPole=0;
     int ileWyswietla;
+    int zmianaKoloru=0;
 
     
     public PanelUno() {
     	repaint();
     	addMouseListener(this);
         addMouseMotionListener(this);
-
     }
     
     
@@ -36,15 +36,8 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         karta.paintIcon(this, g, 0, 0);
         
         ////////////////////NALOZENIE STRZALEK KIERUNKOWYCH////////////////////
-        if(Klient.kierunek==1) {
-        	karta = new ImageIcon("src/png/zegar1.png");
-        	karta.paintIcon(this, g, 210, 210);
-        }
-        else if(Klient.kierunek==2) {
-        	karta = new ImageIcon("src/png/zegar2.png");
-        	karta.paintIcon(this, g, 210, 210);
-        }
-        else {}
+        karta = new ImageIcon("src/png/zegar"+Klient.kolor+""+Klient.tura+".png");
+        karta.paintIcon(this, g, 210, 210);
         
         ////////////////////NALOZENIE KART GRACZA////////////////////
         String sciezka = new String();
@@ -117,6 +110,11 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	karta = new ImageIcon(sciezka);
     	karta.paintIcon(this, g, 349, 327);
  
+    	////////////////////NALOZENIE ZMIANY KOLORU////////////////////
+    	if(zmianaKoloru==1||zmianaKoloru==2) {
+    		karta = new ImageIcon("src/png/kolor.png");
+    		karta.paintIcon(this, g, 250, 520);
+    	}
     }
     
     @Override
@@ -128,8 +126,17 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 
          ruchX2=arg0.getX();
          ruchY=arg0.getY();
+         
+         ////////////////////GRACZ WJECHAL NA ZMIANE KOLORU////////////////////
+         if(ruchY>520&&ruchY<580&&ruchX2>250&&ruchX2<550&&(zmianaKoloru==1||zmianaKoloru==2)) {
+        	 if(ruchPole!=4) {
+        		 ruchPole=4;
+        		 repaint();
+        	 }
+         }
+         
     	 ////////////////////GRACZ WJECHAL NA WLASNA STRZALKE////////////////////
-         if(ruchY>753&&ruchY<780&&ruchX2>47&&ruchX2<97) {
+         else if(ruchY>753&&ruchY<780&&ruchX2>47&&ruchX2<97) {
         	 if(ruchPole!=2) {
         		 ruchPole=2;
         		 repaint();
@@ -208,13 +215,6 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
      @Override
      public void mouseClicked(MouseEvent e) {
     	 
-    	 ////////////////////GRACZ KLIKNAL WLASNA KARTE////////////////////
-    	 if((ruchX>=0)&&(ruchX<=ileWyswietla)&&(ruchPole==1)) {
-    		if(sprawdzenie())
-    			//WYSLIJ NA SERWER
-    			System.out.println("Wybieram: "+Klient.tablica[ruchX+licznikDoku-14]);
-    	 }
-    	 
     	 ////////////////////GRACZ KLIKNAL WLASNA STRZALKE////////////////////
     	 if(Klient.tablica[14]!="n"&&ruchPole==2) {
     		System.out.println("teraz:" + Klient.tablica[licznikDoku]);
@@ -225,18 +225,66 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
             repaint();
             System.out.println("licznik: " + licznikDoku);
     	 }
+    	 if(Klient.tura==Klient.gracz) {
+         ////////////////////GRACZ KLIKNAL WYBOR KOLORU///////////////
+    	 if(ruchPole==4) {
+    		 if(ruchX2>475) {
+    			 if(zmianaKoloru==1)
+    				 Klient.wyslanie("bzy");
+    			 else
+    				 Klient.wyslanie("bfy");
+    		 }
+    		 else if(ruchX2>400) {
+    			 if(zmianaKoloru==1)
+    				 Klient.wyslanie("bzn");
+    			 else
+    				 Klient.wyslanie("bfn");
+    		 }
+    		 else if(ruchX2>325) {
+    			 if(zmianaKoloru==1)
+    				 Klient.wyslanie("bzc");
+    			 else
+    				 Klient.wyslanie("bfc");
+    		 }
+    		 else {
+    			 if(zmianaKoloru==1)
+    				 Klient.wyslanie("bzz");
+    			 else
+    				 Klient.wyslanie("bfz");
+    		 }
+    		 zmianaKoloru=0;
+    		 repaint();
+    	 }
+    	 else {
+    		 zmianaKoloru=0;
+    		 repaint();
+    	 ////////////////////GRACZ KLIKNAL WLASNA KARTE////////////////////
+    	 if((ruchX>=0)&&(ruchX<=ileWyswietla)&&(ruchPole==1)) {
+    		if(sprawdzenie()) {
+    			if(Klient.tablica[ruchX+licznikDoku-14].charAt(0)=='b') {
+    				if(Klient.tablica[ruchX+licznikDoku-14].charAt(1)=='z')
+    					zmianaKoloru=1;
+    				if(Klient.tablica[ruchX+licznikDoku-14].charAt(1)=='f')
+    					zmianaKoloru=2;
+    				repaint();
+    			}
+    			else {
+    				Klient.wyslanie(Klient.tablica[ruchX+licznikDoku-14]);
+    			}
+    		}
+    	}
     	 
     	 ////////////////////GRACZ KLIKNAL STOS KART////////////////////
     	 if(ruchPole==3) {
     		 if(Klient.dobranie==0) {
-    			 //WYŒLIJ NA SERWER
-    			 System.out.println("dobieram 1");
+    			 Klient.wyslanie("d");
     		 }
     		 else {
-    			 //WYŒLIJ NA SERWER
-    			 System.out.println("dobieram "+Klient.dobranie); 
+    			 Klient.wyslanie("d");
     		 }
     	 }
+     }
+     }
      }
  
      @Override
