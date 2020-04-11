@@ -34,13 +34,9 @@ public class Klient{
 				new Okno();
 			}
 		});
-		
-		odebranie();
-
-		
-		//WHILE(TRUE)
-		//ODEBRANIE
-		//WYSLANIE
+		while(true) {
+			odebranie();
+		}
 	}
 	public static void odebranie() throws IOException  {
 		kod=in.readLine();

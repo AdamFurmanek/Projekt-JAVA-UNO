@@ -32,18 +32,25 @@ public class Serwer {
 	private static Socket client4;
 	private static PrintWriter out4;
 	private static BufferedReader in4;
+	private static String odebrane = new String();
 	
 public static void  main(String[] args)throws IOException {
 	
 	reset();
 	polaczenie();
 	wyslanie();
-	System.out.println(in1.readLine());
 
-		//WHILE(TRUE)
-		//BLOK WYSLANIA
-		//ODEBRANIE
-		//BLOK OBLICZENIA
+/*
+	//wyslanie
+	//odebranie
+	//obliczenie kierunku
+	obliczenie tury
+	obliczenie dobrania
+	zabranie/dodanie karty do tablicy
+	ustawienie kartystol(i zabranie poprzedniej)
+	obliczenie koloru
+	*/
+	
 }
 	public static void reset() {
 		for(int i=1;i<10;i++) {
@@ -98,9 +105,6 @@ public static void  main(String[] args)throws IOException {
 		lista.add("bf");
 		lista.add("bf");
 		lista.add("bf");
-		
-		for(int i=0;i<500;i++)
-			lista.add("bf");
 		
 		Collections.shuffle(lista);
         for(int i =0;i<108;i++){
