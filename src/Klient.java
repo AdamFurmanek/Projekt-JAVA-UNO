@@ -18,6 +18,7 @@ public class Klient {
     public static String[] tablica = new String[108];
     public static Okno okno;
     public static int czyDobral1=0;
+    public static int wygrana;
     
 	public static void  main(String[] args) throws IOException {
         for(int i=0;i<108;i++) {
@@ -42,6 +43,9 @@ public class Klient {
 		
 		while(true) {
 			odebranie();
+	    	 if(tablica[0]=="n"||graczLewo==0||graczGora==0||graczPrawo==0) {
+	    		 wygrana=1;
+	    	 }
 		}
 	}
 	public static void odebranie() throws IOException  {
@@ -93,6 +97,8 @@ public class Klient {
 		}
 		
 		Okno.panelUno.repaint();
+
+		
 	}
 	public static void wyslanie(String kod) {
 		out.println(kod);

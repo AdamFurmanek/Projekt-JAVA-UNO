@@ -30,30 +30,34 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     
     
     public void paint(Graphics g) {
-        
+    	
+        String sciezka = new String();
     	////////////////////NALOZENIE TLA (STOLU)////////////////////
         karta = new ImageIcon("src/png/stol1.png");
         karta.paintIcon(this, g, 0, 0);
-        
+        ////////////////////NALOZENIE PLUSOW////////////////////
+        sciezka="src/png/plus"+Klient.dobranie+".png";
+        karta = new ImageIcon(sciezka);
+        karta.paintIcon(this, g, 0, 0);
     	////////////////////NALOZENIE CHMUREK////////////////////
-        karta = new ImageIcon("src/png/light.png");
-        if(Klient.gracz==1&&Klient.tura==2||Klient.gracz==2&&Klient.tura==3||Klient.gracz==3&&Klient.tura==4||Klient.gracz==4&&Klient.tura==1)
-        	karta.paintIcon(this, g, -300, 25);
-        if(Klient.gracz==1&&Klient.tura==3||Klient.gracz==2&&Klient.tura==4||Klient.gracz==3&&Klient.tura==1||Klient.gracz==4&&Klient.tura==2)
-        	karta.paintIcon(this, g, 0, -170);
-        if(Klient.gracz==1&&Klient.tura==4||Klient.gracz==2&&Klient.tura==1||Klient.gracz==3&&Klient.tura==2||Klient.gracz==4&&Klient.tura==3)
-        	karta.paintIcon(this, g, 275, 33);
-        if(Klient.gracz==Klient.tura) {
-        	karta.paintIcon(this, g, -200, 450);
-        	karta.paintIcon(this, g, 0, 450);
-        }
+        	karta = new ImageIcon("src/png/light.png");
+        	if(Klient.gracz==1&&Klient.tura==2||Klient.gracz==2&&Klient.tura==3||Klient.gracz==3&&Klient.tura==4||Klient.gracz==4&&Klient.tura==1)
+        		karta.paintIcon(this, g, -300, 25);
+        	if(Klient.gracz==1&&Klient.tura==3||Klient.gracz==2&&Klient.tura==4||Klient.gracz==3&&Klient.tura==1||Klient.gracz==4&&Klient.tura==2)
+        		karta.paintIcon(this, g, 0, -170);
+        	if(Klient.gracz==1&&Klient.tura==4||Klient.gracz==2&&Klient.tura==1||Klient.gracz==3&&Klient.tura==2||Klient.gracz==4&&Klient.tura==3)
+        		karta.paintIcon(this, g, 275, 33);
+        	if(Klient.gracz==Klient.tura) {
+        		karta.paintIcon(this, g, -200, 450);
+        		karta.paintIcon(this, g, 0, 450);
+        	}
         
         ////////////////////NALOZENIE STRZALEK KIERUNKOWYCH////////////////////
         karta = new ImageIcon("src/png/zegar"+Klient.kolor+""+Klient.kierunek+".png");
         karta.paintIcon(this, g, 210, 210);
         
         ////////////////////NALOZENIE KART GRACZA////////////////////
-        String sciezka = new String();
+
         for(int i=licznikDoku-14, j=0;i<licznikDoku; i++, j++) {
         	
             sciezka="src/png/"+Klient.tablica[i]+".png";
@@ -260,6 +264,12 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
      @Override
      public void mouseReleased(MouseEvent e) {
     	 
+    	 if(Klient.wygrana==1) {
+    		 System.out.println("ktos wygral");
+    		 Klient.wyslanie("cokolwiek");
+    		 Klient.wygrana=0;
+    	 }
+    	 else {
     	 ////////////////////GRACZ KLIKNAL WLASNA STRZALKE////////////////////
     	 if(Klient.tablica[14]!="n"&&ruchPole==2) {
     		if(Klient.tablica[licznikDoku]=="n")
@@ -275,6 +285,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     		 if(ruchX2>475) {
     			 if(zmianaKoloru==1)
     				 Klient.wyslanie("bcy");
+	    			 
     			 else
     				 Klient.wyslanie("bfy");
     		 }
@@ -298,6 +309,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     		 }
     		 zmianaKoloru=0;
     		 repaint();
+    		 Klient.tura=5;
     	 }
     	 else {
     		 zmianaKoloru=0;
@@ -315,6 +327,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     			else {
     				Klient.czyDobral1=0;
     				Klient.wyslanie(Klient.tablica[ruchX+licznikDoku-14]);
+    				Klient.tura=5;
     			}
     		}
     	}
@@ -329,6 +342,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     			 Klient.czyDobral1=1;
     			 Klient.wyslanie("dx");
     		 }
+    		 Klient.tura=5;
     	 }
      }
     	 ////////////////////GRACZ KLIKNAL STRZALKE POD STOSEM////////////////////
@@ -336,7 +350,9 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     		Klient.czyDobral1=0;
     		Klient.wyslanie("dy");
             repaint();
+            Klient.tura=5;
     	 }
+     }
      }
      }
  

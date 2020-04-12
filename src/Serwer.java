@@ -6,7 +6,7 @@ import java.util.Collections;
 
 public class Serwer {
 	
-	private static int ileGraczy=1;
+	private static int ileGraczy=4;
 	private static int tura=1;
 	private static String kartaStol;
 	private static int kierunek;
@@ -32,6 +32,7 @@ public class Serwer {
 	private static String odebrane = new String();
 	private static int poszukiwacz;
 	public static int czyDobral1=0;
+    public static int pierwszeWyswietlenie=1;
 	
 public static void  main(String[] args)throws IOException {
 	
@@ -40,11 +41,33 @@ public static void  main(String[] args)throws IOException {
 
 	while(true) {
 		////////////////////WYSLANIE////////////////////
+		
+		sortuj();
 		wyslanie();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(600);
 		}catch(Exception e) {}
-		////////////////////ODEBRANIE////////////////////
+		pierwszeWyswietlenie=2;
+		wyslanie();
+		try {
+			Thread.sleep(600);
+		}catch(Exception e) {}
+		pierwszeWyswietlenie=1;
+		
+		////////////////////RESET PO ZWYCIÊSTWIE////////////////////
+		if(tablica[0][0]=="n"||tablica[1][0]=="n"||tablica[2][0]=="n"||tablica[3][0]=="n") {
+			in1.readLine();
+			if(ileGraczy>1)
+				in2.readLine();
+			if(ileGraczy>2)
+				in3.readLine();
+			if(ileGraczy>3)
+				in4.readLine();
+			reset();
+			wyslanie();
+		}
+			
+		////////////////////ODEBRANIE/ SZTUCZNA INTELIGENCJA////////////////////
 		if(tura==1)
 			odebrane=in1.readLine();
 		else if(tura==2) {
@@ -54,6 +77,7 @@ public static void  main(String[] args)throws IOException {
 				if(czyDobral1==0) {
 					odebrane="dx";
 					czyDobral1=1;
+					
 				}
 				else {
 					odebrane="dy";
@@ -178,6 +202,7 @@ public static void  main(String[] args)throws IOException {
 			if(odebrane.charAt(1)=='x') {
 				(gracz[tura-1])++;
 				tablica[tura-1][poszukiwacz]=lista.remove(0);
+				pierwszeWyswietlenie=2;
 			}
 			else {
 				if(dobranie>0)
@@ -191,17 +216,15 @@ public static void  main(String[] args)throws IOException {
 			
 			
 		}
+		
 		////////////////////OBLICZENIE DOBRANIA////////////////////
-		System.out.println("tura gracz: "+tura);
-		System.out.println("dobranie: "+dobranie);
-
 		if(odebrane.charAt(0)!='d') {
 			if(odebrane.charAt(1)=='t')
 				dobranie=dobranie+2;
 			if(odebrane.charAt(1)=='f')
 				dobranie=dobranie+4;
-		System.out.println("dobranie po obliczeniu: "+dobranie);
 		}
+		
 		////////////////////OBLICZENIE KIERUNKU////////////////////
 		if(odebrane.charAt(0)!='d') {
 			if(odebrane.charAt(1)=='z') {
@@ -383,6 +406,7 @@ public static void  main(String[] args)throws IOException {
 			dobranie=0;
 		kolor=kartaStol.charAt(0);
 		gracz[0]=7; gracz[1]=7; gracz[2]=7; gracz[3]=7;
+		
 	}
 	
 
@@ -451,7 +475,11 @@ public static void  main(String[] args)throws IOException {
 			else
 				kod+="00"+gracz[3];
 			
-			kod+= tura+""+kartaStol+""+kierunek+"";
+			if(pierwszeWyswietlenie==2)
+				kod+= tura+"";
+			else
+				kod+="5";
+			kod+=kartaStol+""+kierunek+"";
 			
 			if(dobranie>9)
 				kod+=dobranie+"";
@@ -485,6 +513,24 @@ public static void  main(String[] args)throws IOException {
 				out4.flush();
 			}
 		}	
+	}
+	public static void sortuj() {
+		
+		String pom = new String();
+		for(int k=0;k<4;k++) {
+			for(int i=0;i<107;i++) {
+				for(int j=i+1;j<108;j++) {
+					if(tablica[k][j]!="n"&&(tablica[k][i])!="n") {
+						if(tablica[k][i].compareTo(tablica[k][j])>0) {
+							pom=tablica[k][j];
+							tablica[k][j]=tablica[k][i];
+							tablica[k][i]=pom;
+						}
+					}	
+				}
+			}
+		}
+			
 	}
 	
 }
