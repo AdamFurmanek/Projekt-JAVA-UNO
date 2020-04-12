@@ -36,7 +36,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         karta.paintIcon(this, g, 0, 0);
         
         ////////////////////NALOZENIE STRZALEK KIERUNKOWYCH////////////////////
-        karta = new ImageIcon("src/png/zegar"+Klient.kolor+""+Klient.tura+".png");
+        karta = new ImageIcon("src/png/zegar"+Klient.kolor+""+Klient.kierunek+".png");
         karta.paintIcon(this, g, 210, 210);
         
         ////////////////////NALOZENIE KART GRACZA////////////////////
@@ -186,7 +186,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     		 return true;
     	 
     	 //TEN SAM KOLOR
-    	 else if (Klient.kartaStol.charAt(0)==Klient.tablica[ruchX+licznikDoku-14].charAt(0)) {
+    	 else if (Klient.kolor==Klient.tablica[ruchX+licznikDoku-14].charAt(0)) {
     		 //JEŒLI GRACZ MA DOBRAÆ
     		 if(Klient.dobranie>0) {
     			 //JEŒLI GRACZ MA TEN SAM ZNAK(+2 lub +4)
@@ -196,8 +196,9 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     				 return false;
     		 }
     		 //JEŒLI NIE MUSI DOBRAÆ
-    		 else
+    		 else {
     			 return true;
+    		 }
     	 }
     	 //ZMIANA KOLORU
     	 else if(Klient.tablica[ruchX+licznikDoku-14].charAt(0)=='b'&&Klient.dobranie==0)
@@ -217,38 +218,36 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	 
     	 ////////////////////GRACZ KLIKNAL WLASNA STRZALKE////////////////////
     	 if(Klient.tablica[14]!="n"&&ruchPole==2) {
-    		System.out.println("teraz:" + Klient.tablica[licznikDoku]);
-    		if(Klient.tablica[licznikDoku+1]=="n")
+    		if(Klient.tablica[licznikDoku]=="n")
         	 	licznikDoku=14;
          	else
          		licznikDoku=licznikDoku+14;
             repaint();
-            System.out.println("licznik: " + licznikDoku);
     	 }
     	 if(Klient.tura==Klient.gracz) {
          ////////////////////GRACZ KLIKNAL WYBOR KOLORU///////////////
     	 if(ruchPole==4) {
     		 if(ruchX2>475) {
     			 if(zmianaKoloru==1)
-    				 Klient.wyslanie("bzy");
+    				 Klient.wyslanie("bcy");
     			 else
     				 Klient.wyslanie("bfy");
     		 }
     		 else if(ruchX2>400) {
     			 if(zmianaKoloru==1)
-    				 Klient.wyslanie("bzn");
+    				 Klient.wyslanie("bcn");
     			 else
     				 Klient.wyslanie("bfn");
     		 }
     		 else if(ruchX2>325) {
     			 if(zmianaKoloru==1)
-    				 Klient.wyslanie("bzc");
+    				 Klient.wyslanie("bcc");
     			 else
     				 Klient.wyslanie("bfc");
     		 }
     		 else {
     			 if(zmianaKoloru==1)
-    				 Klient.wyslanie("bzz");
+    				 Klient.wyslanie("bcz");
     			 else
     				 Klient.wyslanie("bfz");
     		 }
@@ -262,7 +261,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	 if((ruchX>=0)&&(ruchX<=ileWyswietla)&&(ruchPole==1)) {
     		if(sprawdzenie()) {
     			if(Klient.tablica[ruchX+licznikDoku-14].charAt(0)=='b') {
-    				if(Klient.tablica[ruchX+licznikDoku-14].charAt(1)=='z')
+    				if(Klient.tablica[ruchX+licznikDoku-14].charAt(1)=='c')
     					zmianaKoloru=1;
     				if(Klient.tablica[ruchX+licznikDoku-14].charAt(1)=='f')
     					zmianaKoloru=2;

@@ -6,18 +6,15 @@ import java.util.Collections;
 
 public class Serwer {
 	
-	private static int ileGraczy=1;
+	private static int ileGraczy=2;
 	private static int tura=1;
 	private static String kartaStol;
 	private static int kierunek;
 	private static int dobranie;
 	private static char kolor;
-	private static int gracz1,gracz2,gracz3,gracz4;
+	private static int[] gracz= new int[4];
 	private static ArrayList<String> lista = new ArrayList<String>();
-	private static String[] tablica1 = new String[108];
-	private static String[] tablica2 = new String[108];
-	private static String[] tablica3 = new String[108];
-	private static String[] tablica4 = new String[108];
+	private static String[][] tablica = new String[4][108];
 	private static String kod = new String();
 	private static ServerSocket server;
 	private static Socket client1;
@@ -33,25 +30,229 @@ public class Serwer {
 	private static PrintWriter out4;
 	private static BufferedReader in4;
 	private static String odebrane = new String();
+	private static int poszukiwacz;
 	
 public static void  main(String[] args)throws IOException {
 	
 	reset();
 	polaczenie();
-	wyslanie();
 
-/*
-	//wyslanie
-	//odebranie
-	//obliczenie kierunku
-	obliczenie tury
-	obliczenie dobrania
-	zabranie/dodanie karty do tablicy
-	ustawienie kartystol(i zabranie poprzedniej)
-	obliczenie koloru
-	*/
-	
+	while(true) {
+		////////////////////WYSLANIE////////////////////
+		wyslanie();
+		try {
+			Thread.sleep(1000);
+		}catch(Exception e) {}
+		////////////////////ODEBRANIE////////////////////
+		if(tura==1)
+			odebrane=in1.readLine();
+		else if(tura==2) {
+			if(ileGraczy>1)
+				odebrane=in2.readLine();
+			else {
+				odebrane="d";
+				for(int i=0;i<108;i++) {
+					if(sprawdzenie(tablica[1][i])) {
+						if(tablica[1][i].charAt(0)=='b') {
+							if(i%4==0)
+								odebrane=tablica[1][i]+"c";
+							else if(i%4==1)
+								odebrane=tablica[1][i]+"z";
+							else if(i%4==2)
+								odebrane=tablica[1][i]+"y";
+							else
+								odebrane=tablica[1][i]+"n";
+							break;
+						}
+						else {
+							odebrane=tablica[1][i];
+							break;
+						}
+					}
+				}
+			}
+		}
+		else if(tura==3) {
+			if(ileGraczy>2)
+				odebrane=in3.readLine();
+			else {
+				odebrane="d";
+				for(int i=0;i<108;i++) {
+					if(sprawdzenie(tablica[2][i])) {
+						if(tablica[2][i].charAt(0)=='b') {
+							if(i%4==0)
+								odebrane=tablica[2][i]+"c";
+							else if(i%4==1)
+								odebrane=tablica[2][i]+"z";
+							else if(i%4==2)
+								odebrane=tablica[2][i]+"y";
+							else
+								odebrane=tablica[2][i]+"n";
+							break;
+						}
+						else {
+							odebrane=tablica[2][i];
+							break;
+						}
+					}
+				}
+			}
+		}
+		else if(tura==4) {
+			if(ileGraczy>3)
+				odebrane=in4.readLine();
+			else {
+				odebrane="d";
+				for(int i=0;i<108;i++) {
+					if(sprawdzenie(tablica[3][i])) {
+						if(tablica[3][i].charAt(0)=='b') {
+							if(i%4==0)
+								odebrane=tablica[3][i]+"c";
+							else if(i%4==1)
+								odebrane=tablica[3][i]+"z";
+							else if(i%4==2)
+								odebrane=tablica[3][i]+"y";
+							else
+								odebrane=tablica[3][i]+"n";
+							break;
+						}
+						else {
+							odebrane=tablica[3][i];
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		////////////////////ZABRANIE/DODANIE KART////////////////////
+		if(odebrane.charAt(0)!='d') {
+			(gracz[tura-1])--;
+			lista.add(odebrane.charAt(0)+""+odebrane.charAt(1));
+			Collections.shuffle(lista);
+			for(int i=0;i<108;i++) {
+				
+				if(odebrane.charAt(0)==tablica[tura-1][i].charAt(0)&&odebrane.charAt(1)==tablica[tura-1][i].charAt(1)) {
+					poszukiwacz=i;
+					break;
+				}
+				else {
+					
+				}
+			}
+			for(int i=poszukiwacz;i<107;i++) {
+				tablica[tura-1][i]=tablica[tura-1][i+1];
+			}
+			tablica[tura-1][107]="n";
+		}
+		else {
+			for(int i=0;i<108;i++) {
+				if(tablica[tura-1][i]=="n") {
+					poszukiwacz=i;
+					break;
+				}	
+			}
+			if(dobranie==0)
+				dobranie++;
+			for(int i=0;dobranie>0;dobranie--,i++) {
+				(gracz[tura-1])++;
+				tablica[tura-1][i+poszukiwacz]=lista.remove(0);
+			}
+		}
+		////////////////////OBLICZENIE DOBRANIA////////////////////
+		if(odebrane.charAt(0)!='d') {
+			if(odebrane.charAt(1)=='t')
+				dobranie=dobranie+2;
+			if(odebrane.charAt(1)=='f')
+				dobranie=dobranie+4;
+		}
+		////////////////////OBLICZENIE KIERUNKU////////////////////
+		if(odebrane.charAt(0)!='d') {
+			if(odebrane.charAt(1)=='z') {
+				if(kierunek==1)
+					kierunek=2;
+				else
+					kierunek=1;
+			}
+		}
+		////////////////////OBLICZENIE KOLORU////////////////////
+		if(odebrane.charAt(0)!='d') {
+			if(odebrane.charAt(0)=='b')
+				kolor=odebrane.charAt(2);
+			else
+				kolor=odebrane.charAt(0);
+		}
+		////////////////////OBLICZENIE KARTY NA STOLE////////////////////
+		if(odebrane.charAt(0)!='d') {
+			lista.add(kartaStol);
+			Collections.shuffle(lista);
+			
+			kartaStol=odebrane.charAt(0)+""+odebrane.charAt(1);
+		}
+		////////////////////OBLICZENIE KARTY NA STOLE////////////////////
+		if(kierunek==1) {
+			tura++;
+			if(tura==5)
+				tura=1;
+			if(odebrane.charAt(0)!='d') {
+				if(odebrane.charAt(1)=='p') {
+					tura++;
+					if(tura==5)
+						tura=1;
+				}
+			}
+		}
+		else {
+			tura--;
+			if(tura==0)
+				tura=4;
+			if(odebrane.charAt(0)!='d') {
+				if(odebrane.charAt(1)=='p') {
+					tura--;
+					if(tura==0)
+						tura=4;
+				}
+			}
+		}
+	}
 }
+
+	public static boolean sprawdzenie(String karta) {
+	 if(karta=="n")
+		 return false;
+	
+	 //TEN SAM ZNAK
+	 if(kartaStol.charAt(1)==karta.charAt(1))
+		 return true;
+	 
+	 //TEN SAM KOLOR
+	 else if (kolor==karta.charAt(0)) {
+		 //JEŒLI GRACZ MA DOBRAÆ
+		 if(dobranie>0) {
+			 //JEŒLI GRACZ MA TEN SAM ZNAK(+2 lub +4)
+			 if(kartaStol.charAt(1)==karta.charAt(1))
+				 return true;
+			 else
+				 return false;
+		 }
+		 //JEŒLI NIE MUSI DOBRAÆ
+		 else {
+			 return true;
+		 }
+	 }
+	 //ZMIANA KOLORU
+	 else if(karta.charAt(0)=='b'&&dobranie==0)
+		 return true;
+		 
+	 //ZMIANA KOLORU +4
+	 else if(karta.charAt(0)=='b'&&karta.charAt(1)=='f'&&kartaStol.charAt(1)!='t')
+		 return true;
+		 
+	 //INNE
+	 else
+		 return false;
+	}
+
 	public static void reset() {
 		for(int i=1;i<10;i++) {
 			lista.add("c"+i);
@@ -97,10 +298,10 @@ public static void  main(String[] args)throws IOException {
 		lista.add("yt");
 		lista.add("yt");
 		
-		lista.add("bz");
-		lista.add("bz");
-		lista.add("bz");
-		lista.add("bz");
+		lista.add("bc");
+		lista.add("bc");
+		lista.add("bc");
+		lista.add("bc");
 		lista.add("bf");
 		lista.add("bf");
 		lista.add("bf");
@@ -108,20 +309,20 @@ public static void  main(String[] args)throws IOException {
 		
 		Collections.shuffle(lista);
         for(int i =0;i<108;i++){
-        	tablica1[i]= new String();
-        	tablica1[i]="n";
-        	tablica2[i]= new String();
-        	tablica2[i]="n";
-        	tablica3[i]= new String();
-        	tablica3[i]="n";
-        	tablica4[i]= new String();
-        	tablica4[i]="n";
+        	tablica[0][i]= new String();
+        	tablica[0][i]="n";
+        	tablica[1][i]= new String();
+        	tablica[1][i]="n";
+        	tablica[2][i]= new String();
+        	tablica[2][i]="n";
+        	tablica[3][i]= new String();
+        	tablica[3][i]="n";
         }
 		for(int i=0;i<7;i++) {
-			tablica1[i]=lista.remove(0);
-			tablica2[i]=lista.remove(0);
-			tablica3[i]=lista.remove(0);
-			tablica4[i]=lista.remove(0);
+			tablica[0][i]=lista.remove(0);
+			tablica[1][i]=lista.remove(0);
+			tablica[2][i]=lista.remove(0);
+			tablica[3][i]=lista.remove(0);
 		}
 		for(int i=0; i<5; i++) {
 			if(lista.get(i).charAt(0)!='b') {
@@ -143,8 +344,9 @@ public static void  main(String[] args)throws IOException {
 		else
 			dobranie=0;
 		kolor=kartaStol.charAt(0);
-		gracz1=7; gracz2=7; gracz3=7; gracz4=7;
+		gracz[0]=7; gracz[1]=7; gracz[2]=7; gracz[3]=7;
 	}
+	
 
 	public static void polaczenie() throws IOException {
 		server = new ServerSocket(4999);
@@ -179,38 +381,65 @@ public static void  main(String[] args)throws IOException {
 		}
 	}
 	
+	
 	public static void wyslanie() {
 		for(int j=1;j<ileGraczy+1;j++) {
-			kod=
-				(gracz1/100)+""+(gracz1/10)+""+(gracz1)+""+
-			    (gracz2/100)+""+(gracz2/10)+""+(gracz2)+""+
-			    (gracz3/100)+""+(gracz3/10)+""+(gracz3)+""+
-			    (gracz4/100)+""+(gracz4/10)+""+(gracz4)+""+
-			     tura+kartaStol+kierunek+dobranie+kolor;
+			kod="";
+			if(gracz[0]>99)
+				kod+=gracz[0];
+			else if(gracz[0]>9)
+				kod+="0"+gracz[0];
+			else
+				kod+="00"+gracz[0];
+			
+			if(gracz[1]>99)
+				kod+=gracz[1];
+			else if(gracz[1]>9)
+				kod+="0"+gracz[1];
+			else
+				kod+="00"+gracz[1];
+			
+			if(gracz[2]>99)
+				kod+=gracz[2];
+			else if(gracz[2]>9)
+				kod+="0"+gracz[2];
+			else
+				kod+="00"+gracz[2];
+			
+			if(gracz[3]>99)
+				kod+=gracz[3];
+			else if(gracz[3]>9)
+				kod+="0"+gracz[3];
+			else
+				kod+="00"+gracz[3];
+			
+			kod+= tura+""+kartaStol+""+kierunek+""+dobranie+""+kolor;
+			
 			if(j==1) {
 				for(int i=0;i<108;i++)
-					kod=kod+tablica1[i];
+					kod=kod+tablica[0][i];
 				out1.println(kod);
 				out1.flush();
 			}
 			else if(j==2) {
 				for(int i=0;i<108;i++)
-					kod=kod+tablica2[i];
+					kod=kod+tablica[1][i];
 				out2.println(kod);
 				out2.flush();
 			}
 			else if(j==3) {
 				for(int i=0;i<108;i++)
-					kod=kod+tablica3[i];
+					kod=kod+tablica[2][i];
 				out3.println(kod);
 				out3.flush();
 			}
 			else if(j==4) {
 				for(int i=0;i<108;i++)
-					kod=kod+tablica4[i];
+					kod=kod+tablica[3][i];
 				out4.println(kod);
 				out4.flush();
 			}
 		}	
 	}
+	
 }

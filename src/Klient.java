@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.awt.EventQueue;
 
-public class Klient{
+public class Klient {
 
 	public static String kod = new String();
 	public static int gracz, tura=1;
@@ -34,6 +34,11 @@ public class Klient{
 				new Okno();
 			}
 		});
+		
+		try {
+			Thread.sleep(1000);
+		}catch(Exception e) {}
+		
 		while(true) {
 			odebranie();
 		}
@@ -82,7 +87,6 @@ public class Klient{
 			tablica[i]="";
 			tablica[i]=tablica[i]+kod.charAt(2*i+18);
 			tablica[i]=tablica[i]+kod.charAt(2*i+19);
-			System.out.println(tablica[i]);
 		}
 		
 		Okno.panelUno.repaint();
