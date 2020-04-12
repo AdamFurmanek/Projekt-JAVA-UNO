@@ -115,6 +115,14 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     		karta = new ImageIcon("src/png/kolor.png");
     		karta.paintIcon(this, g, 250, 520);
     	}
+        ////////////////////NALOZENIE STRZALKI POD STOEM////////////////////
+        if(Klient.czyDobral1==1) {
+        	if(ruchPole==5)
+        		karta = new ImageIcon("src/png/strzalka2.png");
+        	else
+        		karta = new ImageIcon("src/png/strzalka1.png");
+        	karta.paintIcon(this, g, 700, 753);	
+        }
     }
     
     @Override
@@ -139,6 +147,14 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
          else if(ruchY>753&&ruchY<780&&ruchX2>47&&ruchX2<97) {
         	 if(ruchPole!=2) {
         		 ruchPole=2;
+        		 repaint();
+        	 }
+         }
+         
+    	 ////////////////////GRACZ WJECHAL NA WLASNA STRZALKE////////////////////
+         else if(ruchY>753&&ruchY<780&&ruchX2>700&&ruchX2<750&&Klient.czyDobral1==1) {
+        	 if(ruchPole!=5) {
+        		 ruchPole=5;
         		 repaint();
         	 }
          }
@@ -227,6 +243,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	 if(Klient.tura==Klient.gracz) {
          ////////////////////GRACZ KLIKNAL WYBOR KOLORU///////////////
     	 if(ruchPole==4) {
+    		 Klient.czyDobral1=0;
     		 if(ruchX2>475) {
     			 if(zmianaKoloru==1)
     				 Klient.wyslanie("bcy");
@@ -268,21 +285,30 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     				repaint();
     			}
     			else {
+    				Klient.czyDobral1=0;
     				Klient.wyslanie(Klient.tablica[ruchX+licznikDoku-14]);
     			}
     		}
     	}
     	 
     	 ////////////////////GRACZ KLIKNAL STOS KART////////////////////
-    	 if(ruchPole==3) {
+    	 if(ruchPole==3&&Klient.czyDobral1==0) {
     		 if(Klient.dobranie==0) {
-    			 Klient.wyslanie("d");
+    			 Klient.czyDobral1=1;
+    			 Klient.wyslanie("dx");
     		 }
     		 else {
-    			 Klient.wyslanie("d");
+    			 Klient.czyDobral1=1;
+    			 Klient.wyslanie("dx");
     		 }
     	 }
      }
+    	 ////////////////////GRACZ KLIKNAL STRZALKE POD STOSEM////////////////////
+    	 if(ruchPole==5) {
+    		Klient.czyDobral1=0;
+    		Klient.wyslanie("dy");
+            repaint();
+    	 }
      }
      }
  

@@ -6,7 +6,7 @@ import java.util.Collections;
 
 public class Serwer {
 	
-	private static int ileGraczy=2;
+	private static int ileGraczy=1;
 	private static int tura=1;
 	private static String kartaStol;
 	private static int kierunek;
@@ -31,6 +31,7 @@ public class Serwer {
 	private static BufferedReader in4;
 	private static String odebrane = new String();
 	private static int poszukiwacz;
+	public static int czyDobral1=0;
 	
 public static void  main(String[] args)throws IOException {
 	
@@ -50,7 +51,14 @@ public static void  main(String[] args)throws IOException {
 			if(ileGraczy>1)
 				odebrane=in2.readLine();
 			else {
-				odebrane="d";
+				if(czyDobral1==0) {
+					odebrane="dx";
+					czyDobral1=1;
+				}
+				else {
+					odebrane="dy";
+					czyDobral1=0;
+				}
 				for(int i=0;i<108;i++) {
 					if(sprawdzenie(tablica[1][i])) {
 						if(tablica[1][i].charAt(0)=='b') {
@@ -70,13 +78,21 @@ public static void  main(String[] args)throws IOException {
 						}
 					}
 				}
+				
 			}
 		}
 		else if(tura==3) {
 			if(ileGraczy>2)
 				odebrane=in3.readLine();
 			else {
-				odebrane="d";
+				if(czyDobral1==0) {
+					odebrane="dx";
+					czyDobral1=1;
+				}
+				else {
+					odebrane="dy";
+					czyDobral1=0;
+				}
 				for(int i=0;i<108;i++) {
 					if(sprawdzenie(tablica[2][i])) {
 						if(tablica[2][i].charAt(0)=='b') {
@@ -102,7 +118,14 @@ public static void  main(String[] args)throws IOException {
 			if(ileGraczy>3)
 				odebrane=in4.readLine();
 			else {
-				odebrane="d";
+				if(czyDobral1==0) {
+					odebrane="dx";
+					czyDobral1=1;
+				}
+				else {
+					odebrane="dy";
+					czyDobral1=0;
+				}
 				for(int i=0;i<108;i++) {
 					if(sprawdzenie(tablica[3][i])) {
 						if(tablica[3][i].charAt(0)=='b') {
@@ -152,19 +175,32 @@ public static void  main(String[] args)throws IOException {
 					break;
 				}	
 			}
-			if(dobranie==0)
-				dobranie++;
-			for(int i=0;dobranie>0;dobranie--,i++) {
+			if(odebrane.charAt(1)=='x') {
 				(gracz[tura-1])++;
-				tablica[tura-1][i+poszukiwacz]=lista.remove(0);
+				tablica[tura-1][poszukiwacz]=lista.remove(0);
 			}
+			else {
+				if(dobranie>0)
+					dobranie--;
+				for(int i=0;dobranie>0;dobranie--,i++) {
+					(gracz[tura-1])++;
+					tablica[tura-1][i+poszukiwacz]=lista.remove(0);
+				}
+				
+			}
+			
+			
 		}
 		////////////////////OBLICZENIE DOBRANIA////////////////////
+		System.out.println("tura gracz: "+tura);
+		System.out.println("dobranie: "+dobranie);
+
 		if(odebrane.charAt(0)!='d') {
 			if(odebrane.charAt(1)=='t')
 				dobranie=dobranie+2;
 			if(odebrane.charAt(1)=='f')
 				dobranie=dobranie+4;
+		System.out.println("dobranie po obliczeniu: "+dobranie);
 		}
 		////////////////////OBLICZENIE KIERUNKU////////////////////
 		if(odebrane.charAt(0)!='d') {
@@ -189,7 +225,8 @@ public static void  main(String[] args)throws IOException {
 			
 			kartaStol=odebrane.charAt(0)+""+odebrane.charAt(1);
 		}
-		////////////////////OBLICZENIE KARTY NA STOLE////////////////////
+		////////////////////OBLICZENIE TURY////////////////////
+		if(odebrane.charAt(0)!='d'||odebrane.charAt(1)!='x') {
 		if(kierunek==1) {
 			tura++;
 			if(tura==5)
@@ -213,6 +250,7 @@ public static void  main(String[] args)throws IOException {
 						tura=4;
 				}
 			}
+		}
 		}
 	}
 }
@@ -413,7 +451,14 @@ public static void  main(String[] args)throws IOException {
 			else
 				kod+="00"+gracz[3];
 			
-			kod+= tura+""+kartaStol+""+kierunek+""+dobranie+""+kolor;
+			kod+= tura+""+kartaStol+""+kierunek+"";
+			
+			if(dobranie>9)
+				kod+=dobranie+"";
+			else
+				kod+="0"+dobranie+"";
+			
+			kod+=kolor+"";
 			
 			if(j==1) {
 				for(int i=0;i<108;i++)

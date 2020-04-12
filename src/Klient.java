@@ -1,4 +1,5 @@
 
+
 import java.net.*;
 import java.io.*;
 import java.awt.EventQueue;
@@ -16,6 +17,7 @@ public class Klient {
 	public static BufferedReader in;
     public static String[] tablica = new String[108];
     public static Okno okno;
+    public static int czyDobral1=0;
     
 	public static void  main(String[] args) throws IOException {
         for(int i=0;i<108;i++) {
@@ -75,17 +77,19 @@ public class Klient {
 		kartaStol=kartaStol+kod.charAt(13);
 		kartaStol=kartaStol+kod.charAt(14);
 		kierunek=((int)kod.charAt(15))-48;
-		dobranie=((int)kod.charAt(16))-48;
-		kolor=kod.charAt(17);
+		
+		dobranie=(((int)kod.charAt(16))-48)*10+(((int)kod.charAt(17))-48);
+		
+		kolor=kod.charAt(18);
         for(int i =0;i<108;i++){
         	tablica[i]="n";
         }
 		for(int i=0;i<54;i++) {
-			if(kod.charAt(2*i+19)=='n')
+			if(kod.charAt(2*i+20)=='n')
 				break;
 			tablica[i]="";
-			tablica[i]=tablica[i]+kod.charAt(2*i+18);
 			tablica[i]=tablica[i]+kod.charAt(2*i+19);
+			tablica[i]=tablica[i]+kod.charAt(2*i+20);
 		}
 		
 		Okno.panelUno.repaint();
