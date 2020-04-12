@@ -362,7 +362,7 @@ public static void  main(String[] args)throws IOException {
 			tablica[2][i]=lista.remove(0);
 			tablica[3][i]=lista.remove(0);
 		}
-		for(int i=0; i<5; i++) {
+		for(int i=0; i<9; i++) {
 			if(lista.get(i).charAt(0)!='b') {
 				kartaStol=lista.remove(i);	
 				break;
