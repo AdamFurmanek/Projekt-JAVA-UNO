@@ -268,6 +268,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     		 System.out.println("ktos wygral");
     		 Klient.wyslanie("cokolwiek");
     		 Klient.wygrana=0;
+    		 licznikDoku=14;
     	 }
     	 else {
     	 ////////////////////GRACZ KLIKNAL WLASNA STRZALKE////////////////////

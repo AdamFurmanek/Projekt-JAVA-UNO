@@ -12,7 +12,7 @@ public Okno()
    	 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	 setVisible(true);
    	 setResizable(false);
-   	 setSize(816,839);
+   	 setSize(800,823);
    	 panelUno = new PanelUno();
    	 add(panelUno);
    	 
