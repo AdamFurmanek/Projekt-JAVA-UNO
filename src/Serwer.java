@@ -6,7 +6,7 @@ import java.util.Collections;
 
 public class Serwer {
 	
-	private static int ileGraczy=4;
+	private static int ileGraczy=1;
 	private static int tura=1;
 	private static String kartaStol;
 	private static int kierunek;
@@ -98,6 +98,7 @@ public static void  main(String[] args)throws IOException {
 						}
 						else {
 							odebrane=tablica[1][i];
+							czyDobral1=0;
 							break;
 						}
 					}
@@ -132,6 +133,7 @@ public static void  main(String[] args)throws IOException {
 						}
 						else {
 							odebrane=tablica[2][i];
+							czyDobral1=0;
 							break;
 						}
 					}
@@ -165,6 +167,7 @@ public static void  main(String[] args)throws IOException {
 						}
 						else {
 							odebrane=tablica[3][i];
+							czyDobral1=0;
 							break;
 						}
 					}
@@ -406,7 +409,9 @@ public static void  main(String[] args)throws IOException {
 			dobranie=0;
 		kolor=kartaStol.charAt(0);
 		gracz[0]=7; gracz[1]=7; gracz[2]=7; gracz[3]=7;
-		
+		czyDobral1=0;
+		if(tura<1||tura>4)
+			tura=1;
 	}
 	
 
