@@ -6,11 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.Graphics;
+import java.awt.geom.AffineTransform;
 
 public class PanelUno extends JPanel implements MouseListener, MouseMotionListener{
     
@@ -20,14 +21,23 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     int ruchX2=0, ruchPole=0;
     int ileWyswietla;
     int zmianaKoloru=0;
-
-    
+    Font[] font = new Font[3];
+    FontMetrics fontMetrics;
     public PanelUno() {
     	repaint();
     	addMouseListener(this);
         addMouseMotionListener(this);
+        
+        
+        
+        font[0] = new Font("Calibri", Font.BOLD, 36);
+        AffineTransform affineTransform = new AffineTransform();
+        affineTransform.rotate(Math.toRadians(90), 0, 0);
+        font[1] = font[0].deriveFont(affineTransform);
+        affineTransform.rotate(Math.toRadians(180), 0, 0);
+        font[2] = font[0].deriveFont(affineTransform);
+        fontMetrics = getFontMetrics(font[0]);
     }
-    
     
     public void paint(Graphics g) {
     	
@@ -105,15 +115,15 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         
         if(Klient.graczLewo>14) {
         	karta = new ImageIcon("src/png/strzalkaLewo.png");
-			karta.paintIcon(this, g, 15, 130);	
+			karta.paintIcon(this, g, 40, 130);	
         }
         if(Klient.graczGora>14) {
         	karta = new ImageIcon("src/png/strzalkaGora.png");
-			karta.paintIcon(this, g, 528, 15);	
+			karta.paintIcon(this, g, 528, 40);	
         }
         if(Klient.graczPrawo>14) {
         	karta = new ImageIcon("src/png/strzalkaPrawo.png");
-			karta.paintIcon(this, g, 756, 442);	
+			karta.paintIcon(this, g, 731, 442);	
         }
         
         ////////////////////NALOZENIE STOSU KART////////////////////
@@ -133,7 +143,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     		karta.paintIcon(this, g, 250, 520);
     	}
         ////////////////////NALOZENIE STRZALKI POD STOSEM////////////////////
-        if(Klient.czyDobral1==1) {
+        if(Klient.czyDobralPierwsza==1) {
         	if(ruchPole==5)
         		karta = new ImageIcon("src/png/strzalka2.png");
         	else
@@ -155,6 +165,14 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
         else
         	karta.paintIcon(this, g, 43,714);
         }
+        
+        g.setFont(font[0]);
+    	g.drawString(Klient.nick[0]+" - "+Klient.punkty[0]+" pkt", 105, 780);
+    	g.drawString(Klient.nick[2]+" - "+Klient.punkty[2]+" pkt", 400-fontMetrics.stringWidth(Klient.nick[1]+" - "+Klient.punkty[2]+" pkt")/2, 33);
+        g.setFont(font[2]);
+    	g.drawString(Klient.nick[1]+" - "+Klient.punkty[1]+" pkt", 33, 300+fontMetrics.stringWidth(Klient.nick[2]+" - "+Klient.punkty[1]+" pkt")/2);
+        g.setFont(font[1]);
+    	g.drawString(Klient.nick[3]+" - "+Klient.punkty[3]+" pkt", 760, 320-fontMetrics.stringWidth(Klient.nick[3]+" - "+Klient.punkty[3]+" pkt")/2);
     }
     
     @Override
@@ -184,7 +202,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
          }
          
     	 ////////////////////GRACZ WJECHAL NA WLASNA STRZALKE////////////////////
-         else if(ruchY>753&&ruchY<780&&ruchX2>700&&ruchX2<750&&Klient.czyDobral1==1) {
+         else if(ruchY>753&&ruchY<780&&ruchX2>700&&ruchX2<750&&Klient.czyDobralPierwsza==1) {
         	 if(ruchPole!=5) {
         		 ruchPole=5;
         		 repaint();
@@ -282,7 +300,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	 if(Klient.tura==Klient.gracz) {
          ////////////////////GRACZ KLIKNAL WYBOR KOLORU///////////////
     	 if(ruchPole==4) {
-    		 Klient.czyDobral1=0;
+    		 Klient.czyDobralPierwsza=0;
     		 if(ruchX2>475) {
     			 if(zmianaKoloru==1)
     				 Klient.wyslanie("bcy");
@@ -326,7 +344,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     				repaint();
     			}
     			else {
-    				Klient.czyDobral1=0;
+    				Klient.czyDobralPierwsza=0;
     				Klient.wyslanie(Klient.tablica[ruchX+licznikDoku-14]);
     				Klient.tura=5;
     			}
@@ -334,13 +352,13 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
     	}
     	 
     	 ////////////////////GRACZ KLIKNAL STOS KART////////////////////
-    	 if(ruchPole==3&&Klient.czyDobral1==0) {
+    	 if(ruchPole==3&&Klient.czyDobralPierwsza==0) {
     		 if(Klient.dobranie==0) {
-    			 Klient.czyDobral1=1;
+    			 Klient.czyDobralPierwsza=1;
     			 Klient.wyslanie("dx");
     		 }
     		 else {
-    			 Klient.czyDobral1=1;
+    			 Klient.czyDobralPierwsza=1;
     			 Klient.wyslanie("dx");
     		 }
     		 Klient.tura=5;
@@ -348,7 +366,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
      }
     	 ////////////////////GRACZ KLIKNAL STRZALKE POD STOSEM////////////////////
     	 if(ruchPole==5) {
-    		Klient.czyDobral1=0;
+    		Klient.czyDobralPierwsza=0;
     		Klient.wyslanie("dy");
             repaint();
             Klient.tura=5;
