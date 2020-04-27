@@ -55,7 +55,7 @@ public class Klient {
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out.println(nazwaGracza[0]);
-			numerGracza = ((int) in.readLine().charAt(0)) - 48;
+			numerGracza = ((int) odbierz().charAt(0)) - 48;
 		} catch (IOException e) {
 			JOptionPane.showConfirmDialog(null, "Nie mo¿na po³¹czyæ z serwerem o podanym IP.", "Brak po³¹czenia",
 					JOptionPane.DEFAULT_OPTION);
@@ -86,7 +86,7 @@ public class Klient {
 				oczekiwanieNaGraczy="Oczekiwanie na graczy";
 			if(in.ready()) {
 				for (int i = 0; i < 4; i++)
-					nazwaGracza[konwersja[numerGracza - 1][i]] = in.readLine();
+					nazwaGracza[konwersja[numerGracza - 1][i]] = odbierz();
 				break;
 			}
 			try {
@@ -101,7 +101,6 @@ public class Klient {
 		Clip tlo = dzwiek("muzyka"+(random.nextInt(4)+1));
 
 		while (true) {
-
 			
 			odebranie();
 			if (kartyGracza[0] == "n" || iloscKart[1] == 0 || iloscKart[2] == 0 || iloscKart[3] == 0) {
@@ -118,7 +117,7 @@ public class Klient {
 				} catch (Exception e) {
 				}
 				for (int i = 0; i < 4; i++)
-					punkty[konwersja[numerGracza - 1][i]] = Integer.parseInt(in.readLine());
+					punkty[konwersja[numerGracza - 1][i]] = Integer.parseInt(odbierz());
 				odebranie();
 				tlo.start();
 			}
@@ -128,38 +127,36 @@ public class Klient {
 			catch (Exception e) {
 			}
 			if(!tlo.isRunning()) {
-				System.out.println("zgaslo");
 				tlo = dzwiek("muzyka"+(random.nextInt(4)+1));
 			}
 		}
-		
 	}
 
 	public static void odebranie() throws IOException {
 
 		for (int i = 0; i < 4; i++) {
 			int staraIloscKart=iloscKart[konwersja[numerGracza - 1][i]];
-			iloscKart[konwersja[numerGracza - 1][i]] = Integer.parseInt(in.readLine());
+			iloscKart[konwersja[numerGracza - 1][i]] = Integer.parseInt(odbierz());
 			if(staraIloscKart!=iloscKart[konwersja[numerGracza - 1][i]]&&iloscKart[konwersja[numerGracza - 1][i]]==1)
 				dzwiek("uno"+(random.nextInt(4)+1));
 		}
 
-		tura = Integer.parseInt(in.readLine());
+		tura = Integer.parseInt(odbierz());
 		String staraKartaStol = new String(kartaStol);
-		kartaStol = in.readLine();
+		kartaStol = odbierz();
 		if(staraKartaStol.compareTo(kartaStol)!=0&&(kartaStol.charAt(1)=='z'||kartaStol.charAt(1)=='p'||kartaStol.charAt(1)=='f'||kartaStol.charAt(1)=='t'))
-			Klient.dzwiek("akcja"+(random.nextInt(6)+1));
+			dzwiek("akcja"+(random.nextInt(6)+1));
 		
-		kierunek = Integer.parseInt(in.readLine());
-		dobranie = Integer.parseInt(in.readLine());
-		kolor = in.readLine().charAt(0);
+		kierunek = Integer.parseInt(odbierz());
+		dobranie = Integer.parseInt(odbierz());
+		kolor = odbierz().charAt(0);
 
 		for (int i = 0; i < 108; i++) {
 			kartyGracza[i] = "n";
 		}
 
 		for (int i = 0; i < iloscKart[0]; i++) {
-			kartyGracza[i] = in.readLine();
+			kartyGracza[i] = odbierz();
 		}
 
 		Okno.panelUno.repaint();
@@ -173,7 +170,18 @@ public class Klient {
                 clip.start();
                 return clip;
 		}
-		catch(Exception e) {System.out.println("blad");}
+		catch(Exception e) {}
+		return null;
+	}
+	public static String odbierz() {
+		
+		try {
+		return in.readLine();
+		}
+		catch(Exception e){
+		JOptionPane.showMessageDialog(Okno.panelUno, "Utracono po³¹czenie z serwerem.", "Utracona po³¹czenie", JOptionPane.ERROR_MESSAGE);
+		System.exit(0);
+		}
 		return null;
 	}
 }

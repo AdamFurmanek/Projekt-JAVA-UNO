@@ -15,4 +15,6 @@ public class Okno extends JFrame {
 		panelUno = new PanelUno();
 		add(panelUno);
 	}
+	
+	
 }

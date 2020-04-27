@@ -1,5 +1,6 @@
 
 import java.net.*;
+import java.awt.EventQueue;
 import java.io.*;
 import java.util.*;
 import java.util.Collections;
@@ -25,6 +26,8 @@ public class Serwer {
 	private static String[] nazwaGracza = { "Komputer", "Komputer", "Komputer", "Komputer" };
 
 	public static void main(String[] args) throws IOException {
+		
+		
 
 		Integer[] wyborIleGraczy = { 1, 2, 3, 4 };
 		InetAddress ip = InetAddress.getLocalHost();
@@ -36,6 +39,12 @@ public class Serwer {
 		} catch (Exception e) {
 			System.exit(0);
 		}
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new OknoSerwer();
+			}
+		});
 
 		reset();
 		polaczenie();
