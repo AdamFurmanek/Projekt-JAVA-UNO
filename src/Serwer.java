@@ -64,7 +64,7 @@ public class Serwer {
 				reset();
 				wyslanie();
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(10000);
 				} catch (Exception e) {
 				}
 			}

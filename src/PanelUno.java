@@ -1,23 +1,37 @@
 
 import java.awt.*;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Random;
 
 public class PanelUno extends JPanel implements MouseListener, MouseMotionListener {
 
 	public ImageIcon obraz;
 
-	public int wybranaKarta = 0, wybranePole = 0, myszX = 0, myszY = 0, licznikDoku = 14, ileWyswietla,
+	public int wybranaKarta = -1, wybranePole = 0, myszX = 0, myszY = 0, licznikDoku = 14, ileWyswietla,
 			zmianaKoloru = 0;
 
+	public Random random = new Random();
+	
 	public Font[] font = new Font[3];
 	public FontMetrics fontMetrics;
 
 	public PanelUno() {
+	
+        
 		repaint();
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -29,6 +43,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 		affineTransform.rotate(Math.toRadians(180), 0, 0);
 		font[2] = font[0].deriveFont(affineTransform);
 		fontMetrics = getFontMetrics(font[0]);
+
 	}
 
 	public void paint(Graphics g) {
@@ -164,7 +179,10 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 
 		g.setColor(Color.BLACK);
 		g.setFont(font[0]);
-		if (Klient.odliczanieNowejRundy == 0)
+		if(Klient.kartaStol.charAt(0) == 'a') {
+			g.drawString(Klient.oczekiwanieNaGraczy, 105, 780);
+		}
+		else if (Klient.odliczanieNowejRundy == 0)
 			g.drawString(Klient.nazwaGracza[0] + " - " + Klient.punkty[0] + " pkt", 105, 780);
 		else
 			g.drawString("Nastêpna runda za " + Klient.odliczanieNowejRundy + "...", 105, 780);
@@ -190,9 +208,11 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 
 		//////////////////// GRACZ WJECHAL NA ZMIANE KOLORU////////////////////
 		if (myszY > 520 && myszY < 580 && myszX > 250 && myszX < 550 && (zmianaKoloru == 1 || zmianaKoloru == 2)) {
+
 			if (wybranePole != 4) {
 				wybranePole = 4;
 				repaint();
+				Klient.dzwiek("karta1");
 			}
 		}
 
@@ -201,6 +221,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 			if (wybranePole != 2) {
 				wybranePole = 2;
 				repaint();
+				Klient.dzwiek("strzalka1");
 			}
 		}
 
@@ -209,14 +230,16 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 			if (wybranePole != 5) {
 				wybranePole = 5;
 				repaint();
+				Klient.dzwiek("strzalka1");
 			}
 		}
 
 		//////////////////// GRACZ WJECHAL NA STOS KART////////////////////
-		else if (myszY > 560 && myszY < 753 && myszX > 610 && myszX < 770) {
+		else if (myszY > 560 && myszY < 753 && myszX > 610 && myszX < 770&&Klient.kartaStol.charAt(0) != 'a') {
 			if (wybranePole != 3) {
 				wybranePole = 3;
 				repaint();
+				Klient.dzwiek("stos1");
 			}
 		}
 
@@ -226,16 +249,29 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 				wybranePole = 1;
 				repaint();
 			}
+			
+			ileWyswietla = -1;
+			for (int i = licznikDoku - 14; i < licznikDoku; i++) {
+				if (Klient.kartyGracza[i] != "n")
+					ileWyswietla++;
+			}
+			
 			myszX = (myszX - 47) / 30;
+			
+			if(myszX>ileWyswietla&&myszX<=ileWyswietla+3)
+				myszX=ileWyswietla;
+			
+			if(myszX<=ileWyswietla&&myszX>=0) {
 			if (myszX != wybranaKarta) {
 				wybranaKarta = myszX;
-				ileWyswietla = 0;
-				for (int i = licznikDoku - 14; i < licznikDoku; i++) {
-					if (Klient.kartyGracza[i] != "n")
-						ileWyswietla++;
-				}
-				if (wybranaKarta >= ileWyswietla && wybranaKarta < ileWyswietla + 3)
-					wybranaKarta = ileWyswietla - 1;
+
+				repaint();
+				Klient.dzwiek("karta1");
+
+			}
+			}
+			else {
+				wybranaKarta=-1;
 				repaint();
 			}
 		}
@@ -292,10 +328,12 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 			else
 				licznikDoku = licznikDoku + 14;
 			repaint();
+			Klient.dzwiek("strzalka2");
 		}
 		if (Klient.tura == Klient.numerGracza) {
 			//////////////////// GRACZ KLIKNAL WYBOR KOLORU///////////////
 			if (wybranePole == 4) {
+				Klient.dzwiek("karta2");
 				Klient.czyDobralPierwsza = 0;
 				if (myszX > 475) {
 					if (zmianaKoloru == 1)
@@ -338,6 +376,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 							Klient.czyDobralPierwsza = 0;
 							Klient.out.println(Klient.kartyGracza[wybranaKarta + licznikDoku - 14]);
 							Klient.tura = 5;
+							Klient.dzwiek("karta2");
 						}
 					}
 				}
@@ -352,6 +391,7 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 						Klient.out.println("dx");
 					}
 					Klient.tura = 5;
+					Klient.dzwiek("stos2");
 				}
 			}
 			//////////////////// GRACZ KLIKNAL STRZALKE POD STOSEM////////////////////
@@ -360,9 +400,14 @@ public class PanelUno extends JPanel implements MouseListener, MouseMotionListen
 				Klient.out.println("dy");
 				repaint();
 				Klient.tura = 5;
+				
+				if(Klient.dobranie==0)
+					Klient.dzwiek("strzalka3");
+				else
+					Klient.dzwiek("stos2");
+				
 			}
 		}
-
 	}
 
 	@Override
